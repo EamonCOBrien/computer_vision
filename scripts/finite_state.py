@@ -10,6 +10,11 @@ from std_msgs.msg import Int8MultiArray
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
+from sensor_msgs.msg import Image
+from copy import deepcopy
+from cv_bridge import CvBridge
+import cv2
+import numpy
 
 class NeatoController():
     "This class encompasses multiple behaviors for the simulated neato"
@@ -31,6 +36,9 @@ class NeatoController():
         # Initializing user input
         self.settings = termios.tcgetattr(sys.stdin)
         self.key = None
+        self.cv_image = None                        # the latest image from the camera
+        self.bridge = CvBridge()                    # used to convert ROS messages to OpenCV
+        rospy.Subscriber(image_topic, Image, self.process_image)
 
     def run(self):
         """ The run loop repeatedly executes the current state function.  Each state function will return a function
@@ -128,6 +136,11 @@ class NeatoController():
     def candy_classify(self):
     	# Uses a classification system to figure out what's in front of it
     	pass
+    	
+    def process_image(self, msg):
+        """ Process image messages from ROS and stash them in an attribute
+            called cv_image for subsequent processing """
+        self.cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
 
 if __name__ == '__main__':
     node = NeatoController()
