@@ -15,7 +15,7 @@ from teleop_abridged import get_key, key_map
 
 class FiniteStateController(object):
     "This class encompasses multiple behaviors for the simulated neato"
-    
+
     def __init__(self, image_topic):
         rospy.init_node('finite_state')
         self.state = "teleop"
@@ -55,7 +55,7 @@ class FiniteStateController(object):
             self.angular_vel = self.angular_k * normalized_x
             self.linear_vel = .3
 
-    
+
     def run(self):
         """ The run loop repeatedly executes the current state function.  Each state function will return a function
         corresponding to the next state to run. """
@@ -68,17 +68,17 @@ class FiniteStateController(object):
             if self.state == "candy":
                 self.candy_classify()
 
-    
+
     def getKey(self):
         key = get_key(self.settings)
         return key
 
-    
+
     def teleop(self):
         # Checking user input
         self.key = key_map(self.key, self.vel_msg)
         # send instructions to the neato
-        self.vel_pub.publish(self.vel_msg) 
+        self.vel_pub.publish(self.vel_msg)
         rospy.Rate(10).sleep
 
 
@@ -94,19 +94,19 @@ class FiniteStateController(object):
         self.vel_pub.publish(self.vel_msg)
         self.state = "teleop"
 
-            
-    def candy_classify(self):
-    	# Display the image in the different windows
-    	if not self.cv_image is None:
-	        print("image shape: ", self.cv_image.shape)
-	        # cv2.imshow('binary_image', self.binary_image)
-	        cv2.imshow('video_window', self.cv_image)
-	        cv2.waitKey(5)
 
-	    # Classify the image
-	    self.classifier.query = self.cv_image
-    	# Uses a classification system to figure out what's in front of it
-    	self.classifier.run()
+    def candy_classify(self):
+    # Display the image in the different windows
+    if not self.cv_image is None:
+       print("image shape: ", self.cv_image.shape)
+       # cv2.imshow('binary_image', self.binary_image)
+       cv2.imshow('video_window', self.cv_image)
+       cv2.waitKey(5)
+
+   # Classify the image
+   self.classifier.query = self.cv_image
+    # Uses a classification system to figure out what's in front of it
+    self.classifier.run()
 
 
 if __name__ == '__main__':
