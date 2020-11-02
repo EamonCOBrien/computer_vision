@@ -7,8 +7,8 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
-img1 = cv.imread('box.png',cv.IMREAD_GRAYSCALE)          # queryImage
-img2 = cv.imread('box_in_scene.png',cv.IMREAD_GRAYSCALE) # trainImage
+img1 = cv.imread('../imgs/skittles_light.jpg',cv.IMREAD_GRAYSCALE)          # queryImage
+img2 = cv.imread('../imgs/skittles_train.jpg',cv.IMREAD_GRAYSCALE) # trainImage
 # Initiate SIFT detector
 sift = cv.SIFT_create()
 # find the keypoints and descriptors with SIFT
