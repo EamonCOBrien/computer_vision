@@ -72,7 +72,10 @@ class ImageClassifier():
 
 		# Get the minimum avg (best match)
 		min_index = self.train['avgs'].argmin()
-		print("Best match: ", self.train['names'][min_index])
+		candy_name = self.train['names'][min_index]
+		print("Best match: ", candy_name)
+		return candy_name
+
 
 
 if __name__ == '__main__':

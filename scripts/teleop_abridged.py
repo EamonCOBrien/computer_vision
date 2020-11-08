@@ -8,17 +8,17 @@ import rospy
 from geometry_msgs.msg import Twist, Vector3
 from math import pi
 
-def get_key(settings):
+def getKey(settings):
     tty.setraw(sys.stdin.fileno())
     select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-def key_map(key, vel_msg):
+def key_map(key, vel_msg, settings):
     # Checking user input
     if key != '\x03':
-        key = getKey()
+        key = getKey(settings)
         if key == 'w':
             vel_msg.angular.z = 0
             vel_msg.linear.x = 1
@@ -32,6 +32,9 @@ def key_map(key, vel_msg):
             vel_msg.linear.x = 0
             vel_msg.angular.z = -1
         elif key == ' ':
+            vel_msg.angular.z = 0
+            vel_msg.linear.x = 0
+        elif key == '1':
             vel_msg.angular.z = 0
             vel_msg.linear.x = 0
     return key
