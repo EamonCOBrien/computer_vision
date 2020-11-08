@@ -97,16 +97,16 @@ class FiniteStateController(object):
 
     def candy_classify(self):
     # Display the image in the different windows
-    if not self.cv_image is None:
-       print("image shape: ", self.cv_image.shape)
-       # cv2.imshow('binary_image', self.binary_image)
-       cv2.imshow('video_window', self.cv_image)
-       cv2.waitKey(5)
+        if not self.cv_image is None:
+           print("image shape: ", self.cv_image.shape)
+           # cv2.imshow('binary_image', self.binary_image)
+           cv2.imshow('video_window', self.cv_image)
+           cv2.waitKey(5)
 
-   # Classify the image
-   self.classifier.query = self.cv_image
-    # Uses a classification system to figure out what's in front of it
-    self.classifier.run()
+           # Classify the image
+           self.classifier.query = self.cv_image
+           # Uses a classification system to figure out what's in front of it
+           self.classifier.run()
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """ This is a script that walks through some of the basics of working with
-    images with opencv in ROS. """
+	images with opencv in ROS. """
 
 
 import numpy as np
@@ -9,24 +9,28 @@ import pandas as pd
 import cv2 as cv
 import matplotlib.pyplot as plt
 import math
+import os
 
 class ImageClassifier():
 	def __init__(self):
-		self.query = self.load_image('../imgs/snickers_query.jpg') 
-		candy_names = ['skittles', 'snickers', 'nerds', 'reeses', 'almondjoy']
+		self.query = self.load_image('../imgs/nerds_dark.jpg')
+		candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
 		train_imgs = self.get_data(candy_names)
-		avgs = np.zeros(len(train_imgs))
+		avgs = np.zeros(len(candy_names))
 		self.train = pd.DataFrame(list(zip(candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
 
 	def get_data(self, names):
 		train_imgs = []
-		for n in names:
-			img = self.load_image('../imgs/'+n+'.jpg')
-			train_imgs.append(img)
+		for name in names:
+			candy_imgs = []
+			for root, dirs, files in os.walk('../imgs/'+name):
+				for file in files:
+					candy_imgs.append(self.load_image('../imgs/'+name+'/'+file))
+			train_imgs.append(candy_imgs)
 		return train_imgs
 
 	def load_image(self, url):
-		return cv.imread(url,cv.IMREAD_GRAYSCALE) 
+		return cv.imread(url,cv.IMREAD_GRAYSCALE)
 
 	def ORB_detection(self, query, train):
 		# Initiate ORB detector
@@ -58,8 +62,11 @@ class ImageClassifier():
 
 	def run(self):
 		# Iterate through all the images
-		for index, img in enumerate(self.train['imgs']):
-			avg = self.ORB_detection(self.query, img)
+		for index, imgs in enumerate(self.train['imgs']):
+			match_values = []
+			for img in imgs:
+				match_values.append(self.ORB_detection(self.query, img))
+			avg = sum(match_values)/len(match_values)
 			self.train.at[index, 'avgs'] = avg
 		print("List of averages", self.train['avgs'])
 

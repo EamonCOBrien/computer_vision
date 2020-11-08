@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 import tty
 import select
@@ -43,5 +42,5 @@ def run_teleop(key, vel_msg):
             vel_msg.linear.x = 0
             state = "origin"
         # send instructions to the neato
-        vel_pub.publish vel_msg) 
+        vel_pub.publish vel_msg)
         rospy.Rate(10).sleep
