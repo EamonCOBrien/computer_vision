@@ -12,7 +12,7 @@ from cv_bridge import CvBridge
 import cv2
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
-from keypoint_test import ImageClassifier
+from candy_classifier import ImageClassifier
 
 class FiniteStateController(object):
 	"This class encompasses multiple behaviors for the simulated neato"
@@ -41,10 +41,12 @@ class FiniteStateController(object):
 		# Keypoint classification parameters
 		self.classifier = ImageClassifier()
 
+		# Parameters for the robot to react to the candy it finds
+		self.likes = ['snickers, nerds, ']
 		self.candy_name = ''
 
 	# def process_scan(self):
-	# 	pass 
+	# 	pass
 
 
 	def process_image(self, msg):
