@@ -10,11 +10,13 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import math
 import os
+import time
 
 class ImageClassifier():
 	def __init__(self):
 		self.query = self.load_image('../imgs/nerds_dark.jpg')
 		candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
+		self.dataset_size = 1
 		train_imgs = self.get_data(candy_names)
 		avgs = np.zeros(len(candy_names))
 		self.train = pd.DataFrame(list(zip(candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
@@ -24,8 +26,10 @@ class ImageClassifier():
 		for name in names:
 			candy_imgs = []
 			for root, dirs, files in os.walk('../imgs/'+name):
-				for file in files:
-					candy_imgs.append(self.load_image('../imgs/'+name+'/'+file))
+				for i in range(self.dataset_size):
+					if i >= len(files):
+						break
+					candy_imgs.append(self.load_image('../imgs/'+name+'/'+files[i]))
 			train_imgs.append(candy_imgs)
 		return train_imgs
 
