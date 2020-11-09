@@ -16,10 +16,13 @@ class ImageClassifier():
 	def __init__(self):
 		self.query = self.load_image('../imgs/nerds_dark.jpg')
 		candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
-		self.dataset_size = 1
+		self.dataset_size = 10
 		train_imgs = self.get_data(candy_names)
 		avgs = np.zeros(len(candy_names))
 		self.train = pd.DataFrame(list(zip(candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
+
+		# For timing: 
+		self.start_time = time.time()
 
 	def get_data(self, names):
 		train_imgs = []
@@ -77,7 +80,9 @@ class ImageClassifier():
 		# Get the minimum avg (best match)
 		min_index = self.train['avgs'].argmin()
 		candy_name = self.train['names'][min_index]
+		end = time.time()
 		print("Best match: ", candy_name)
+		print("Time elapsed: ", end-self.start_time)
 		return candy_name
 
 
