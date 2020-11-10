@@ -15,18 +15,18 @@ import time
 class ImageClassifier():
 	def __init__(self):
 		self.query = self.load_image('../imgs/nerds_dark.jpg')
-		candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
-		self.dataset_size = 10
-		train_imgs = self.get_data(candy_names)
-		avgs = np.zeros(len(candy_names))
-		self.train = pd.DataFrame(list(zip(candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
+		self.candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
+		self.dataset_size = 1
+		self.train_imgs = self.get_data()
+		avgs = np.zeros(len(self.candy_names))
+		self.train = pd.DataFrame(list(zip(self.candy_names, self.train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
 
 		# For timing:
 		self.start_time = time.time()
 
-	def get_data(self, names):
+	def get_data(self):
 		train_imgs = []
-		for name in names:
+		for name in self.candy_names:
 			candy_imgs = []
 			for root, dirs, files in os.walk('../imgs/'+name):
 				for i in range(self.dataset_size):
