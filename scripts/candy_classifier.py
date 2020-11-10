@@ -21,7 +21,7 @@ class ImageClassifier():
 		avgs = np.zeros(len(candy_names))
 		self.train = pd.DataFrame(list(zip(candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
 
-		# For timing: 
+		# For timing:
 		self.start_time = time.time()
 
 	def get_data(self, names):
@@ -47,7 +47,6 @@ class ImageClassifier():
 		kp1, des1 = orb.detectAndCompute(query,None)
 		kp2, des2 = orb.detectAndCompute(train,None)
 
-		# create BFMatcher object
 		bf = cv.BFMatcher(cv.NORM_HAMMING, crossCheck=True)
 
 		# Match descriptors.
@@ -56,11 +55,6 @@ class ImageClassifier():
 		# Sort them in the order of their distance.
 		matches = sorted(matches, key = lambda x:x.distance)
 
-		# Draw first 10 matches.
-		# res = cv.drawMatches(query,kp1,train,kp2,matches[:10],None,flags=cv.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-		# plt.imshow(res),plt.show()
-
-		# Average distances
 		total = 0
 		for m in matches[:5]:
 			total += m.distance

@@ -42,7 +42,10 @@ class FiniteStateController(object):
 		self.classifier = ImageClassifier()
 
 		# Parameters for the robot to react to the candy it finds
-		self.likes = ['snickers, nerds, ']
+		self.likes = ['Smarties','Haribo','Nerds', 'Milk Duds']
+		self.dislikes = ['Starburst', 'Swedish_Fish', 'Twizzlers']
+		self.allergies = ['Reeses', 'Snickers']
+		self.favorite = ['Skittles']
 		self.candy_name = ''
 
 	# def process_scan(self):
@@ -140,14 +143,21 @@ class FiniteStateController(object):
 
 
 	def react_candy(self):
-		if self.candy_name == 'Snickers':
+		if self.candy_name in self.favorite:
 			self.vel_pub.publish(Twist(angular=Vector3(z=-math.pi)))
 			rospy.sleep(4)
 			self.state = "teleop"
-		if self.candy_name == "Nerds":
-			self.state = "square"
-
-
+		if self.candy_name in self.likes:
+			self.vel_pub.publish(Twist(linear=Vector3(x=1)))
+			rospy.sleep(2)
+		if self.candy_name in self.dislikes:
+			self.vel_pub.publish(Twist(angular=Vector3(z=-math.pi/2)))
+			rospy.sleep(0.5)
+			self.vel_pub.publish(Twist(angular=Vector3(z=math.pi/2)))
+			rospy.sleep(0.5)
+		if self.candy_name in self.allergies:
+			self.vel_pub.publish(Twist(linear=Vector3(x=-1)))
+			rospy.sleep(1)
 
 if __name__ == '__main__':
 	node = FiniteStateController("/camera/image_raw")
