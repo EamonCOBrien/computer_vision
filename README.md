@@ -30,15 +30,23 @@ Instead of SIFT or its derivatives, we used the ORB (Oriented FAST and rotated B
 
 We incorporated our new code into the finite state controller that we wrote for the warmup project. In the previous version, the robot was in teleop mode until the user pressed a number key, which activated a variety of other behaviors. We added recognizing a candy and reacting to it as a new behavior, mapped to the '1' key. When it enters this state, the neato captures an image with its onboard camera, detects keypoints with ORB, and compares those with every candy in its training database. For each candy, the database has several images. We average the match quality of each example of a candy and choose the type with the minimum value.
 
-![output](/report_images/Output.png)
+![output-stats](/report_images/Output.png)
 
 When the neato is initialized, it is given a list of likes and dislikes which include the candies in its database. If the candy is one of its likes, it moves toward the image. 
 
-gif
+![neato-likes-nerds](https://github.com/EamonCOBrien/computer_vision/blob/main/report_images/nerds.gif)
 
 If it is a dislike, the neato moves back and forth as though it were shaking its head no.
 
-gif
+![neato-dislikes-swedishfish](https://github.com/EamonCOBrien/computer_vision/blob/main/report_images/swedish%20fish.gif)
+
+If the neato sees a candy that it's 'allergic' to, then it will run away. 
+
+![neato-allergic-reeses](https://github.com/EamonCOBrien/computer_vision/blob/main/report_images/reeses(2).gif)
+
+If the neato sees its favorite candy, Starburst, then it will spin in a circle out of excitedment.
+
+![neato-fav-starburst](https://github.com/EamonCOBrien/computer_vision/blob/main/report_images/starburst.gif)
 
 ## Potential Improvements
 
