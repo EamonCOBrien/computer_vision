@@ -30,7 +30,7 @@ Instead of SIFT or its derivatives, we used the ORB (Oriented FAST and rotated B
 
 We folded our new code into the finite state controller that we wrote for the warmup project. In the previous version, the robot was in teleop mode until the user pressed a number key, which activated a variety of other behaviors. We added recognizing a candy and reacting to it as a new behavior, mapped to the '1' key. When it enters this state, the neato captures an image with its onboard camera, detects keypoints with ORB, and compares those with every candy in its training database.
 
-img
+![output](/report_images/Output.png)
 
 When the neato is initialized, it is given a list of likes and dislikes which include the candies in its database. If the candy is one of its likes, it moves toward the image. 
 
