@@ -14,27 +14,29 @@ import time
 
 class ImageClassifier():
 	def __init__(self):
-		self.query = self.load_image('../imgs/nerds_dark.jpg')
+		self.query = self.load_image('../imgs/snickers_query.jpg')
 		self.candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
 		self.dataset_size = 1
-		self.train_imgs = self.get_data()
-		avgs = np.zeros(len(self.candy_names))
-		self.train = pd.DataFrame(list(zip(self.candy_names, self.train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
+		self.train = self.create_data(self.dataset_size)
 
 		# For timing:
 		self.start_time = time.time()
 
-	def get_data(self):
+	def create_data(self, size):
+		self.dataset_size = size
 		train_imgs = []
 		for name in self.candy_names:
 			candy_imgs = []
 			for root, dirs, files in os.walk('../imgs/'+name):
-				for i in range(self.dataset_size):
+				for i in range(size):
 					if i >= len(files):
 						break
 					candy_imgs.append(self.load_image('../imgs/'+name+'/'+files[i]))
 			train_imgs.append(candy_imgs)
-		return train_imgs
+
+		avgs = np.zeros(len(self.candy_names))
+		self.train = pd.DataFrame(list(zip(self.candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
+		return self.train
 
 	def load_image(self, url):
 		return cv.imread(url,cv.IMREAD_GRAYSCALE)
@@ -62,6 +64,7 @@ class ImageClassifier():
 		return avg
 
 	def run(self):
+		self.start_time = time.time()
 		# Iterate through all the images
 		for index, imgs in enumerate(self.train['imgs']):
 			match_values = []

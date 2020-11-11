@@ -13,8 +13,7 @@ if __name__ == '__main__':
 	times = []
 	for i in range (10):
 		detector = ImageClassifier()
-		detector.dataset_size = i + 1
-		detector.train_images = detector.get_data()
+		detector.train = detector.create_data(i+1)
 		detector.run()
 		end = time.time()
 		diff = end-detector.start_time
