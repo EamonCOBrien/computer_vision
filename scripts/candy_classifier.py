@@ -69,7 +69,7 @@ class ImageClassifier():
 				match_values.append(self.ORB_detection(self.query, img))
 			avg = sum(match_values)/len(match_values)
 			self.train.at[index, 'avgs'] = avg
-		print("List of averages", self.train['avgs'])
+		print("List of averages"+'\n', self.train['avgs'])
 
 		# Get the minimum avg (best match)
 		min_index = self.train['avgs'].argmin()
