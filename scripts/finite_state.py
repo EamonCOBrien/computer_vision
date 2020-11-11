@@ -25,8 +25,6 @@ class FiniteStateController(object):
 		# Image capturing parameters
 		self.cv_image = None # the latest image from the camera
 		self.bridge = CvBridge() # used to convert ROS messages to OpenCV
-		cv2.namedWindow('video_window')
-		cv2.namedWindow("binary_image", cv2.WINDOW_AUTOSIZE)
 
 		# Pubs and subscribers
 		self.vel_pub = rospy.Publisher("cmd_vel", Twist, queue_size=10)
@@ -42,10 +40,10 @@ class FiniteStateController(object):
 		self.classifier = ImageClassifier()
 
 		# Parameters for the robot to react to the candy it finds
-		self.likes = ['Smarties','Haribo','Nerds', 'Milk Duds']
-		self.dislikes = ['Starburst', 'Swedish_Fish', 'Twizzlers']
+		self.likes = ['Skittles','Haribo','Nerds', 'Milk Duds']
+		self.dislikes = ['Swedish_Fish', 'Twizzlers']
 		self.allergies = ['Reeses', 'Snickers']
-		self.favorite = ['Skittles']
+		self.favorite = ['Starburst']
 		self.candy_name = ''
 
 	# def process_scan(self):
@@ -130,8 +128,6 @@ class FiniteStateController(object):
 	# Display the image in the different windows
 		if not self.cv_image is None:
 		   print("image shape: ", self.cv_image.shape)
-		   # cv2.imshow('binary_image', self.binary_image)
-		   cv2.imshow('video_window', self.cv_image)
 		   cv2.waitKey(5)
 
 		   # Classify the image
@@ -146,18 +142,19 @@ class FiniteStateController(object):
 		if self.candy_name in self.favorite:
 			self.vel_pub.publish(Twist(angular=Vector3(z=-math.pi)))
 			rospy.sleep(4)
-			self.state = "teleop"
 		if self.candy_name in self.likes:
-			self.vel_pub.publish(Twist(linear=Vector3(x=1)))
-			rospy.sleep(2)
+			self.square()
 		if self.candy_name in self.dislikes:
-			self.vel_pub.publish(Twist(angular=Vector3(z=-math.pi/2)))
-			rospy.sleep(0.5)
-			self.vel_pub.publish(Twist(angular=Vector3(z=math.pi/2)))
-			rospy.sleep(0.5)
+			for i in range(2):
+				self.vel_pub.publish(Twist(angular=Vector3(z=-math.pi/2)))
+				rospy.sleep(0.5)
+				self.vel_pub.publish(Twist(angular=Vector3(z=math.pi/2)))
+				rospy.sleep(0.5)
 		if self.candy_name in self.allergies:
 			self.vel_pub.publish(Twist(linear=Vector3(x=-1)))
 			rospy.sleep(1)
+		self.vel_pub.publish(Twist(linear=Vector3(x=0), angular=Vector3(z=0)))
+		self.state = 'teleop'
 
 if __name__ == '__main__':
 	node = FiniteStateController("/camera/image_raw")

@@ -16,25 +16,33 @@ class ImageClassifier():
 	def __init__(self):
 		self.query = self.load_image('../imgs/snickers_query.jpg')
 		self.candy_names = ['Haribo', 'Nerds', 'Reeses', 'Skittles', 'Starburst', 'Snickers', 'Swedish_Fish', 'Twizzlers']
-		self.dataset_size = 1
+		self.dataset_size = 5
 		self.train = self.create_data(self.dataset_size)
 
 		# For timing:
 		self.start_time = time.time()
 
 	def create_data(self, size):
+		"""
+		Initialize the dataset
+		params:
+			size: specifies the number of images to include from each class
+		"""
 		self.dataset_size = size
 		train_imgs = []
 		for name in self.candy_names:
 			candy_imgs = []
+			# Get images from /imgs in repo
 			for root, dirs, files in os.walk('../imgs/'+name):
 				for i in range(size):
+					# Only keep as many images as specified in size. Stops if not enough are available
 					if i >= len(files):
 						break
 					candy_imgs.append(self.load_image('../imgs/'+name+'/'+files[i]))
 			train_imgs.append(candy_imgs)
 
 		avgs = np.zeros(len(self.candy_names))
+		# Store all data in a DataFrame for easier manipulation
 		self.train = pd.DataFrame(list(zip(self.candy_names, train_imgs, avgs)), columns=['names', 'imgs', 'avgs'])
 		return self.train
 
@@ -57,6 +65,7 @@ class ImageClassifier():
 		# Sort them in the order of their distance.
 		matches = sorted(matches, key = lambda x:x.distance)
 
+		# Calculate the average of the top 5 matches, as our accuracy metric
 		total = 0
 		for m in matches[:5]:
 			total += m.distance
@@ -70,11 +79,12 @@ class ImageClassifier():
 			match_values = []
 			for img in imgs:
 				match_values.append(self.ORB_detection(self.query, img))
+			# Get average of the avg. match value for each picture in the dataset
 			avg = sum(match_values)/len(match_values)
 			self.train.at[index, 'avgs'] = avg
 		print("List of averages"+'\n', self.train['avgs'])
 
-		# Get the minimum avg (best match)
+		# Get the minimum total avg (best match)
 		min_index = self.train['avgs'].argmin()
 		candy_name = self.train['names'][min_index]
 		end = time.time()
